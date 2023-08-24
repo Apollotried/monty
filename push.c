@@ -1,47 +1,41 @@
-#include "monty.c"
-
+#include "monty.h"
+#include <string.h>
 /**
- * push - add first
- * @stack: stack pointer
- * @lineNumber: error
- * @n: n
- * Return: void
- */
-
-void push(stack_t **stack, char *n, unsigned int lineNumber)
+*push - add a neode in the list
+*@stack: pointer to a pointer to the doubly linked list
+*@line_number: line where there is an error
+*Return: nothing
+*/
+void push(stack_t **stack, char *n, unsigned int line_number)
 {
 	stack_t *new = NULL;
-	int j;
+	int i;
 
 	new = malloc(sizeof(stack_t));
-	if (!new)
+	if (new == NULL)
 	{
-		fprintf(stderr, "Error: malloc failes\n");
+		fprintf(stderr, "Error: malloc failed\n");
 		exit(EXIT_FAILURE);
 	}
-
-	if (!n)
+	if (n == NULL)
 	{
-		fprintf(stderr, "L%d: usage: push\n", lineNumber);
+		fprintf(stderr, "L%d: usage: push integer\n", line_number);
 		exit(EXIT_FAILURE);
 	}
-
-	for (j = 0; n[j]; j++)
+	for (i = 0; n[i]; i++)
 	{
-		if (j == 0 && n[j] == '-')
+		if (n[0] == '-' && i == 0)
 			continue;
-		if (n[j] > 57 || n[j] < 48)
+		if (n[i] < 48 || n[i] > 57)
 		{
-			fprintf(stderr, "L%d: usage: push\n", lineNumber);
+			fprintf(stderr, "L%d: usage: push integer\n", line_number);
 			exit(EXIT_FAILURE);
 		}
 	}
-
 	new->n = atoi(n);
-	new->next = NULL;
 	new->prev = NULL;
-
-	if (*stack)
+	new->next = NULL;
+	if (*stack != NULL)
 	{
 		new->next = *stack;
 		(*stack)->prev = new;
